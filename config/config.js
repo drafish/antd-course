@@ -31,5 +31,12 @@ export default {
         component: './Puzzlecards'
       }
     ]
-  }]
+  }],
+  proxy: {
+    '/dev': {
+      target: 'https://official-joke-api.appspot.com',
+      changeOrigin: true,
+      pathRewrite: { "^/dev": "" }
+    }
+  },
 };
