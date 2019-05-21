@@ -1,6 +1,7 @@
 import React from 'react';
 import { Table, Modal, Button, Form, Input } from 'antd';
 import { connect } from 'dva';
+import SampleChart from '../../component/SampleChart';
 
 const FormItem = Form.Item;
 
@@ -8,12 +9,15 @@ function mapStateToProps(state) {
   return {
     cardsList: state.cards.cardsList,
     cardsLoading: state.loading.effects['cards/queryList'],
+    statistic: state.cards.statistic,
   }
 }
 
 class List extends React.Component {
   state = {
     visible: false,
+    statisticVisible: false,
+    id: null,
   }
   columns = [
     {
@@ -29,7 +33,26 @@ class List extends React.Component {
       dataIndex: 'url',
       render: value => <a href={value}>{value}</a>,
     },
+    {
+      title: '',
+      dataIndex: '_',
+      render: (_, { id }) => {
+        return (
+          <Button onClick={() => { this.showStatistic(id) }}>图表</Button>
+        )
+      }
+    },
   ];
+  showStatistic = (id) => {
+    this.props.dispatch({
+      type: 'cards/getStatistic',
+      payload: id,
+    })
+    this.setState({ id, statisticVisible: true })
+  }
+  handleStatisticCancel = () => {
+    this.setState({ statisticVisible: false })
+  }
   showModal = () => {
     this.setState({ visible: true })
   }
@@ -55,8 +78,8 @@ class List extends React.Component {
     });
   }
   render() {
-    const { cardsList, cardsLoading, form: { getFieldDecorator } } = this.props;
-    const { visible } = this.state
+    const { cardsList, cardsLoading, form: { getFieldDecorator }, statistic } = this.props;
+    const { visible, statisticVisible, id } = this.state
 
     return (
       <div>
@@ -89,6 +112,9 @@ class List extends React.Component {
               )}
             </FormItem>
           </Form>
+        </Modal>
+        <Modal visible={statisticVisible} footer={null} onCancel={this.handleStatisticCancel}>
+          <SampleChart data={statistic[id]} />
         </Modal>
       </div>
     );
