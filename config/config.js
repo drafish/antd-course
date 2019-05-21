@@ -29,6 +29,10 @@ export default {
       {
         path: '/puzzlecards',
         component: './Puzzlecards'
+      },
+      {
+        path: '/list',
+        component: '../page/list'
       }
     ]
   }],
