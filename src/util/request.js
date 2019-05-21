@@ -1,7 +1,5 @@
-import { func } from "prop-types";
-
 function checkStatus(response) {
-  if (response.status >= 200 && response < 300) {
+  if (response.status >= 200 && response.status < 300) {
     return response;
   }
 
